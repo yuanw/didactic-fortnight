@@ -1,10 +1,10 @@
 cabal-version:      2.4
-name:               haskell-template
+name:               try-effectful
 version:            0.1.0.0
 license:            MIT
-copyright:          2022 Sridhar Ratnakumar
-maintainer:         srid@srid.ca
-author:             Sridhar Ratnakumar
+copyright:          2022 Yuan Wang
+maintainer:         me@yuanwang.ca
+author:             Yuan Wang
 category:           Web
 
 -- TODO: Before hackage release.
@@ -96,14 +96,20 @@ common shared
 common test-deps
   build-depends: hspec
 
-executable haskell-template
+library
+  import:  shared
+  hs-source-dirs:      src
+  exposed-modules:
+    TryEffectful
+
+executable effectful-demo
   import:  shared
   main-is: Main.hs
 
-test-suite haskell-test
+test-suite try-effectful-test
   import:             shared, test-deps
   type:               exitcode-stdio-1.0
   main-is:            Spec.hs
   hs-source-dirs:     test
   build-tool-depends: hspec-discover:hspec-discover
-  build-depends:      haskell-template
+  build-depends:      try-effectful

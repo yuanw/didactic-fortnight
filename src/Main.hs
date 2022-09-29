@@ -12,10 +12,6 @@
 
 module Main where
 
-import Effectful (Eff, Effect, IOE, MonadIO (liftIO), runEff, type (:>))
-import Effectful.Dispatch.Dynamic (interpret)
-import Effectful.TH (makeEffect)
-
 -- import Main.Utf8 qualified as Utf8
 
 {- |
@@ -23,26 +19,7 @@ import Effectful.TH (makeEffect)
 
  The `bin/run` script will invoke this function.
 -}
-data Greeting :: Effect where
-  GetName :: Greeting m String
-  Greet :: String -> Greeting m ()
-
-makeEffect ''Greeting
-
-program :: (Greeting :> es) => Eff es ()
-program = do
-  name <- getName
-
-  greet name
-
-runGreeting :: (IOE :> es) => Eff (Greeting : es) a -> Eff es a
-runGreeting = interpret $ const \case
-  GetName -> liftIO getLine
-  Greet name -> liftIO $ putStrLn $ "Hello, " <> name <> "!"
-
-runProgram :: Eff '[Greeting, IOE] a -> IO a
-runProgram = runEff . runGreeting
-
+import TryEffectful
 main :: IO ()
 main = runProgram program
 
