@@ -4,7 +4,7 @@ cradle:
       component: "lib:try-effectful"
 
     - path: "./Main.hs"
-      component: "try-effectful:exe:effectful-demo"
+      component: "exe:effectful-demo"
 
     - path: "test"
-      component: "try-effectful:test:try-effectful-test"
+      component: "test:try-effectful-test"
