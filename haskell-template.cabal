@@ -106,6 +106,4 @@ test-suite haskell-test
   main-is:            Spec.hs
   hs-source-dirs:     test
   build-tool-depends: hspec-discover:hspec-discover
-
--- build-depends:
---   haskell-template
+  build-depends:      haskell-template
