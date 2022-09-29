@@ -12,15 +12,20 @@
 
 module TryEffectful where
 
-import Effectful (Eff, Effect, IOE, MonadIO (liftIO), runEff, type (:>))
-import Effectful.Dispatch.Dynamic (interpret)
-import Effectful.TH (makeEffect)
+import Effectful
+import Effectful.Dispatch.Dynamic
 
 data Greeting :: Effect where
   GetName :: Greeting m String
   Greet :: String -> Greeting m ()
 
-makeEffect ''Greeting
+type instance DispatchOf Greeting  = Dynamic
+
+getName ::(HasCallStack, Greeting :> es) =>  Eff es String
+getName = send  GetName
+
+greet ::(HasCallStack, Greeting :> es) => String ->  Eff es ()
+greet  = send . Greet
 
 program :: (Greeting :> es) => Eff es ()
 program = do
