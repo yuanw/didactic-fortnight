@@ -23,6 +23,8 @@
           buildTools = hp: {
             inherit (pkgs)
               treefmt;
+            inherit (hp)
+              implicit-hie;
           } // config.treefmt.formatters;
           # overrides = self: super: {}
           enableHLSCheck = true;
