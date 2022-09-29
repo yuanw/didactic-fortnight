@@ -12,7 +12,7 @@ module Spec (
 import Effectful (Eff, runPureEff)
 import Effectful.Dispatch.Dynamic (reinterpret)
 import Effectful.Writer.Dynamic qualified as Writer
-import Effects (Greeting (..), program)
+import TryEffectful (Greeting (..), program)
 import Test.Hspec (Spec, describe, it, shouldBe)
 
 runGreeting :: String -> Eff (Greeting : es) a -> Eff es (a, String)
