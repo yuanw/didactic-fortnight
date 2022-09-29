@@ -11,6 +11,7 @@
 {-# LANGUAGE TypeOperators #-}
 
 module TryEffectful where
+
 import Effectful (Eff, Effect, IOE, MonadIO (liftIO), runEff, type (:>))
 import Effectful.Dispatch.Dynamic (interpret)
 import Effectful.TH (makeEffect)

@@ -12,8 +12,8 @@ module Spec (
 import Effectful (Eff, runPureEff)
 import Effectful.Dispatch.Dynamic (reinterpret)
 import Effectful.Writer.Dynamic qualified as Writer
-import TryEffectful (Greeting (..), program)
 import Test.Hspec (Spec, describe, it, shouldBe)
+import TryEffectful (Greeting (..), program)
 
 runGreeting :: String -> Eff (Greeting : es) a -> Eff es (a, String)
 runGreeting name = reinterpret Writer.runWriterLocal $ const \case

@@ -97,10 +97,9 @@ common test-deps
   build-depends: hspec
 
 library
-  import:  shared
-  hs-source-dirs:      src
-  exposed-modules:
-    TryEffectful
+  import:          shared
+  hs-source-dirs:  src
+  exposed-modules: TryEffectful
 
 executable effectful-demo
   import:  shared
