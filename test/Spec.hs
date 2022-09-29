@@ -30,4 +30,4 @@ spec = do
       let (result, greeting) = runProgram "Drew" program
 
       result `shouldBe` ()
-      greeting `shouldBe` "greet: Drew"
+      greeting `shouldBe` "greet: Drew1 "
