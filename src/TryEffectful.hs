@@ -17,7 +17,7 @@ data Greeting :: Effect where
   GetName :: Greeting m String
   Greet :: String -> Greeting m ()
 
-type instance DispatchOf Greeting = 'Dynamic
+type instance DispatchOf Greeting = Dynamic
 
 getName :: (HasCallStack, Greeting :> es) => Eff es String
 getName = send GetName
