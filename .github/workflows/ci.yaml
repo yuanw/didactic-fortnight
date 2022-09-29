@@ -3,7 +3,7 @@ on:
   # Run only when pushing to master branch, and making PRs
   push:
     branches:
-      - master
+      - main
   pull_request:
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
       # TODO: Remove after https://github.com/srid/haskell-flake/issues/19
       - name: Hlint
         run: |
-          nix develop -j auto -c hlint src
+          nix develop -j auto -c hlint src test
       - name: Build
         id: build
         run: |
