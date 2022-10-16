@@ -1,27 +1,50 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE DerivingStrategies #-}
 
 module Expressions where
 
-data Expr = Num Double
-          | Add Expr Expr
-          | Mul Expr Expr
-          | Div Expr Expr
+import Control.Monad (MonadPlus)
+import GHC.Base ((<|>))
 
-eval :: Expr -> Maybe Double
-eval (Num x) = Just x
-eval (Add px py) = case eval px of
-  Nothing -> Nothing
-  Just x -> case eval py of
-    Nothing -> Nothing
-    Just y -> Just (x+y)
-eval (Mul px py) = case eval px of
-  Nothing -> Nothing
-  Just x -> case eval py of
-    Nothing -> Nothing
-    Just y -> Just (x * y)
-eval (Div px py) = case eval px of
-  Nothing -> Nothing
-  Just x -> case eval py of
-    Nothing -> Nothing
-    Just 0 -> Nothing --div by zero
-    Just y -> Just (x/y)
+data Expr
+  = Num Double
+  | Add Expr Expr
+  | Mul Expr Expr
+  | Div Expr Expr
+  | Sqrt Expr
+
+--https://kowainik.github.io/posts/deriving
+data ExprF k
+  = NumF Double
+  | AddF k k
+  | MulF k k
+  | DivF k k
+  | SqrtF k
+  deriving stock (Functor)
+
+eval :: (MonadPlus m, MonadFail m) => Expr -> m Double
+eval (Num x) = return x
+eval (Add px py) = do
+  x <- eval px
+  y <- eval py
+  return (x + y)
+eval (Mul px py) = do
+  x <- eval px
+  y <- eval py
+  return (x * y)
+eval (Div px py) = do
+  x <- eval px
+  y <- eval py
+  case y of
+    0 -> fail "Divide by Zero"
+    _ -> return (x / y)
+eval (Sqrt px) = do
+  x <- eval px
+  return (sqrt x) <|> return (-(sqrt x))
+
+-- --https://gitlab.haskell.org/ghc/ghc/-/issues/12160
+-- instance MonadFail (Either String) where
+--   fail = Left
+
+-- evalMaybe :: Expr -> Maybe Double
+-- evalMaybe = eval
