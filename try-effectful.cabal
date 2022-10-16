@@ -95,6 +95,7 @@ common shared
   default-language:   Haskell2010
   other-modules:
     Expressions
+    Free
     TryEffectful
 
 common test-deps
