@@ -93,7 +93,7 @@ common shared
 
   hs-source-dirs:     src
   default-language:   Haskell2010
-  other-modules:      TryEffectful
+  other-modules:      TryEffectful, Expressions
 
 common test-deps
   build-depends: hspec
