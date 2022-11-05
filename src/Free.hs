@@ -18,3 +18,8 @@ instance Functor sig => Applicative (Free sig) where
 instance Functor sig => Monad (Free sig) where
   (Var x) >>= f = f x
   Op g >>= f = Op ((>>= f) <$> g)
+
+
+handle :: Functor sig => (sig b -> b) -> (a -> b) -> Free sig a -> b
+handle alg gen (Var x) = gen x
+handle alg gen (Op g) = undefined (fmap gen g )
