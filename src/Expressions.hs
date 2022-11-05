@@ -4,8 +4,8 @@
 module Expressions where
 
 import Control.Monad (MonadPlus)
-import GHC.Base ((<|>))
 import Free
+import GHC.Base ((<|>))
 
 -- data Expr
 --   = Num Double
@@ -22,8 +22,6 @@ data ExprF k
   | DivF k k
   | SqrtF k
   deriving stock (Functor)
-
-
 
 -- eval :: (MonadPlus m, MonadFail m) => Expr -> m Double
 -- eval (Num x) = return x
