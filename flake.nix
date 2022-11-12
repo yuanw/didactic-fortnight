@@ -19,7 +19,7 @@
       perSystem = { self', config, pkgs, ... }: {
         haskellProjects.default = {
           root = ./.;
-          name = "haskell-template";
+          name = "didactic-fortnight";
           buildTools = hp: {
             inherit (pkgs)
               treefmt;
