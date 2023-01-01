@@ -36,33 +36,33 @@
           nixpkgs-fmt.enable = true;
           cabal-fmt.enable = true;
         };
-        devShells.default = pkgs.mkShell {
-          nativeBuildInputs = [
-            pkgs.nixpkgs-fmt
-            pkgs.pre-commit
-          ];
-          shellHook = ''
-            ${config.pre-commit.installationScript}
-          '';
+        mission-control.scripts = {
+          docs = {
+            description = "Start Hoogle server for project dependencies";
+            exec = ''
+              echo http://127.0.0.1:8888
+              hoogle serve -p 8888 --local
+            '';
+            category = "Dev Tools";
+          };
+          repl = {
+            description = "Start the cabal repl";
+            exec = ''
+              cabal repl "$@"
+            '';
+            category = "Dev Tools";
+          };
         };
-        #   treefmt.config = {
-        #   inherit (config.flake-root) projectRootFile;
-        #   package = pkgs.treefmt;
-
-        #   programs.ormolu.enable = true;
-        #   programs.nixpkgs-fmt.enable = true;
-
-        #   # We use fourmolu
-        #   programs.ormolu.package = pkgs.haskellPackages.fourmolu;
-        #   settings.formatter.ormolu = {
-        #     options = [
-        #       "--ghc-opt"
-        #       "-XImportQualifiedPost"
-        #     ];
-        #   };
-        # };
-        # Default shell.
-        # devShells.default = config.mission-control.installToDevShell self'.devShells.main;
+        devShells.default = config.mission-control.installToDevShell (pkgs.mkShell
+          {
+            nativeBuildInputs = [
+              pkgs.nixpkgs-fmt
+              pkgs.pre-commit
+            ];
+            shellHook = ''
+              ${config.pre-commit.installationScript}
+            '';
+          } // self'.devShells.main);
         packages.default = self'.packages.main-try-effectful;
       };
     };
