@@ -19,7 +19,7 @@ category:           Web
 
 extra-source-files:
   LICENSE
-  README.md
+  README.org
 
 common shared
   ghc-options:
