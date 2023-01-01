@@ -26,15 +26,13 @@
             # You can add more than one local package here.
             try-effectful.root = ./.; # Assumes ./my-package.cabal
           };
-          # buildTools = hp: {
-          #      treefmt = config.treefmt.build.wrapper;
-          #    } // config.treefmt.build.programs;
           hlsCheck.enable = true;
           hlintCheck.enable = true;
         };
         pre-commit.settings.hooks = {
           nixpkgs-fmt.enable = true;
           cabal-fmt.enable = true;
+          fourmolu.enable = true;
         };
         mission-control.scripts = {
           docs = {
