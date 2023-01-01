@@ -20,7 +20,7 @@
         haskellProjects.default = {
           packages = {
             # You can add more than one local package here.
-            try-effectful.root = ./.;  # Assumes ./my-package.cabal
+            try-effectful.root = ./.; # Assumes ./my-package.cabal
           };
           buildTools = hp: {
             inherit (pkgs)
@@ -39,7 +39,7 @@
             cabal-fmt
             fourmolu;
         };
-   packages.default = self'.packages.try-effectful;
+        packages.default = self'.packages.try-effectful;
       };
     };
 }
