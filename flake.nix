@@ -1,45 +1,56 @@
 {
-  description = "srid/haskell-template: Nix template for Haskell projects";
+  description = "haskell playground";
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     haskell-flake.url = "github:srid/haskell-flake";
     treefmt-flake.url = "github:srid/treefmt-flake";
-    check-flake.url = "github:srid/check-flake";
+    flake-root.url = "github:srid/flake-root";
+    mission-control.url = "github:Platonic-Systems/mission-control";
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit self; } {
-      systems = nixpkgs.lib.systems.flakeExposed;
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      systems = [ "x86_64-linux" ];
       imports = [
         inputs.haskell-flake.flakeModule
-        inputs.treefmt-flake.flakeModule
-        inputs.check-flake.flakeModule
+        inputs.treefmt-nix.flakeModule
+        inputs.flake-root.flakeModule
+        inputs.mission-control.flakeModule
       ];
-      perSystem = { self', config, pkgs, ... }: {
-        haskellProjects.default = {
+      perSystem = { self', lib, config, pkgs, ... }: {
+        haskellProjects.main = {
           packages = {
             # You can add more than one local package here.
             try-effectful.root = ./.; # Assumes ./my-package.cabal
           };
-          buildTools = hp: {
-            inherit (pkgs)
-              treefmt;
-            inherit (hp)
-              implicit-hie;
-          } // config.treefmt.formatters;
-          # overrides = self: super: {}
-          hlsCheck.enable = true;
+       buildTools = hp: {
+            treefmt = config.treefmt.build.wrapper;
+          } // config.treefmt.build.programs;
+       hlsCheck.enable = true;
           hlintCheck.enable = true;
         };
-        treefmt.formatters = {
-          inherit (pkgs)
-            nixpkgs-fmt;
-          inherit (pkgs.haskellPackages)
-            cabal-fmt
-            fourmolu;
+          treefmt.config = {
+          inherit (config.flake-root) projectRootFile;
+          package = pkgs.treefmt;
+
+          programs.ormolu.enable = true;
+          programs.nixpkgs-fmt.enable = true;
+          programs.cabal-fmt.enable = true;
+
+          # We use fourmolu
+          programs.ormolu.package = pkgs.haskellPackages.fourmolu;
+          settings.formatter.ormolu = {
+            options = [
+              "--ghc-opt"
+              "-XImportQualifiedPost"
+            ];
+          };
         };
-        packages.default = self'.packages.try-effectful;
+           # Default shell.
+        devShells.default =
+          config.mission-control.installToDevShell self'.devShells.main;
+              packages.default = self'.packages.main-try-effectful;
       };
     };
 }
