@@ -73,8 +73,8 @@
             category = "Dev Tools";
           };
         };
-         devShells.default = pkgs.mkShell {
-          inputsFrom = [ config.mission-control.devShell self'.devShells.main  ];
+        devShells.default = pkgs.mkShell {
+          inputsFrom = [ config.mission-control.devShell self'.devShells.main ];
         };
         packages.default = self'.packages.main-try-effectful;
       };

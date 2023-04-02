@@ -14,7 +14,7 @@ import GHC.Base ((<|>))
 --   | Div Expr Expr
 --   | Sqrt Expr
 
---https://kowainik.github.io/posts/deriving
+-- https://kowainik.github.io/posts/deriving
 data ExprF k
   = NumF Double
   | AddF k k

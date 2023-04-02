@@ -1,6 +1,6 @@
 module Free where
 
---https://serokell.io/blog/introduction-to-free-monads
+-- https://serokell.io/blog/introduction-to-free-monads
 -- sig is sigautare of node,
 data Free sig a
   = Var a
