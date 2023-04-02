@@ -5,9 +5,9 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     haskell-flake.url = "github:srid/haskell-flake";
     flake-root.url = "github:srid/flake-root";
-    mission-control.url = "github:Platonic-Systems/mission-control";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+    mission-control.url = "github:Platonic-Systems/mission-control";
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
@@ -73,7 +73,9 @@
             category = "Dev Tools";
           };
         };
-        devShells.default = config.mission-control.installToDevShell self'.devShells.main;
+         devShells.default = pkgs.mkShell {
+          inputsFrom = [ config.mission-control.devShell self'.devShells.main  ];
+        };
         packages.default = self'.packages.main-try-effectful;
       };
     };
