@@ -6,8 +6,8 @@
     haskell-flake.url = "github:srid/haskell-flake";
     flake-root.url = "github:srid/flake-root";
     mission-control.url = "github:Platonic-Systems/mission-control";
-    pre-commit-hooks-nix.url = "github:cachix/pre-commit-hooks.nix";
-
+    treefmt-nix.url = "github:numtide/treefmt-nix";
+    treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
@@ -17,22 +17,39 @@
       imports = [
         inputs.haskell-flake.flakeModule
         inputs.flake-root.flakeModule
+        inputs.treefmt-nix.flakeModule
         inputs.mission-control.flakeModule
-        inputs.pre-commit-hooks-nix.flakeModule
       ];
       perSystem = { self', lib, config, pkgs, ... }: {
         haskellProjects.main = {
-          packages = {
-            # You can add more than one local package here.
-            try-effectful.root = ./.; # Assumes ./my-package.cabal
+          # packages = {
+          #   # You can add more than one local package here.
+          #   try-effectful.root = ./.; # Assumes ./my-package.cabal
+          # };
+          devShell = {
+            tools = hp:
+              {
+                treefmt = config.treefmt.build.wrapper;
+              } // config.treefmt.build.programs;
+            hlsCheck.enable = true;
           };
-          hlsCheck.enable = true;
-          hlintCheck.enable = true;
         };
-        pre-commit.settings.hooks = {
-          nixpkgs-fmt.enable = true;
-          cabal-fmt.enable = true;
-          fourmolu.enable = true;
+        treefmt.config = {
+          inherit (config.flake-root) projectRootFile;
+          package = pkgs.treefmt;
+          flakeFormatter =
+            false; # For https://github.com/numtide/treefmt-nix/issues/55
+
+          programs.ormolu.enable = true;
+          programs.nixpkgs-fmt.enable = true;
+          programs.cabal-fmt.enable = true;
+          programs.hlint.enable = true;
+
+          # We use fourmolu
+          programs.ormolu.package = pkgs.haskellPackages.fourmolu;
+          settings.formatter.ormolu = {
+            options = [ "--ghc-opt" "-XImportQualifiedPost" ];
+          };
         };
         mission-control.scripts = {
           docs = {
@@ -50,17 +67,13 @@
             '';
             category = "Dev Tools";
           };
+          fmt = {
+            description = "Format the source tree";
+            exec = config.treefmt.build.wrapper;
+            category = "Dev Tools";
+          };
         };
-        devShells.default = config.mission-control.installToDevShell (pkgs.mkShell
-          {
-            nativeBuildInputs = [
-              pkgs.nixpkgs-fmt
-              pkgs.pre-commit
-            ];
-            shellHook = ''
-              ${config.pre-commit.installationScript}
-            '';
-          } // self'.devShells.main);
+        devShells.default = config.mission-control.installToDevShell self'.devShells.main;
         packages.default = self'.packages.main-try-effectful;
       };
     };
