@@ -1,0 +1,4 @@
+#+title: Readme
+using chicken scheme for now
+
+`csi`
