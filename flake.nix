@@ -12,19 +12,16 @@
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # mission-control.url = "github:Platonic-Systems/mission-control";
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      # systems = [ "x86_64-linux" ];
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [
-         inputs.pre-commit.flakeModule
+        inputs.pre-commit.flakeModule
         inputs.haskell-flake.flakeModule
         inputs.flake-root.flakeModule
         inputs.treefmt-nix.flakeModule
-        # inputs.mission-control.flakeModule
       ];
       perSystem = { self', lib, system, config, pkgs, ... }: {
         _module.args.pkgs = import inputs.nixpkgs {
@@ -63,29 +60,7 @@
             options = [ "--ghc-opt" "-XImportQualifiedPost" ];
           };
         };
-        # mission-control.scripts = {
-        #   docs = {
-        #     description = "Start Hoogle server for project dependencies";
-        #     exec = ''
-        #       echo http://127.0.0.1:8888
-        #       hoogle serve -p 8888 --local
-        #     '';
-        #     category = "Dev Tools";
-        #   };
-        #   repl = {
-        #     description = "Start the cabal repl";
-        #     exec = ''
-        #       cabal repl "$@"
-        #     '';
-        #     category = "Dev Tools";
-        #   };
-        #   fmt = {
-        #     description = "Format the source tree";
-        #     exec = config.treefmt.build.wrapper;
-        #     category = "Dev Tools";
-        #   };
-        # };
-        devShells.default = pkgs.mkShell {
+             devShells.default = pkgs.mkShell {
            inputsFrom = [
             config.pre-commit.devShell
             config.treefmt.build.devShell
@@ -94,7 +69,6 @@
           buildInputs = [
             pkgs.rust-bin.beta.latest.default
           ];
-          # inputsFrom = [ config.mission-control.devShell self'.devShells.main ];
         };
         packages.default = self'.packages.try-effectful;
 
