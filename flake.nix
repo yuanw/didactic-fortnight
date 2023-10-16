@@ -26,7 +26,7 @@
         inputs.treefmt-nix.flakeModule
         # inputs.mission-control.flakeModule
       ];
-      perSystem = { self', lib, config, pkgs, ... }: {
+      perSystem = { self', lib, system, config, pkgs, ... }: {
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
           overlays = [
