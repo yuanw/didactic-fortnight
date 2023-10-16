@@ -5,7 +5,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     haskell-flake.url = "github:srid/haskell-flake";
     flake-root.url = "github:srid/flake-root";
-      rust-overlay.url = "github:oxalica/rust-overlay";
+    rust-overlay.url = "github:oxalica/rust-overlay";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
     pre-commit = {
@@ -60,8 +60,8 @@
             options = [ "--ghc-opt" "-XImportQualifiedPost" ];
           };
         };
-             devShells.default = pkgs.mkShell {
-           inputsFrom = [
+        devShells.default = pkgs.mkShell {
+          inputsFrom = [
             config.pre-commit.devShell
             config.treefmt.build.devShell
             config.haskellProjects.main.outputs.devShell
