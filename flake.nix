@@ -83,7 +83,7 @@
            inputsFrom = [
             config.pre-commit.devShell
             config.treefmt.build.devShell
-            config.haskellProjects.default.outputs.devShell
+            config.haskellProjects.main.outputs.devShell
           ];
           buildInputs = [
             pkgs.rust-bin.beta.latest.default
