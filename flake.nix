@@ -5,9 +5,14 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     haskell-flake.url = "github:srid/haskell-flake";
     flake-root.url = "github:srid/flake-root";
+      rust-overlay.url = "github:oxalica/rust-overlay";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
-    mission-control.url = "github:Platonic-Systems/mission-control";
+    pre-commit = {
+      url = "github:cachix/pre-commit-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    # mission-control.url = "github:Platonic-Systems/mission-control";
   };
 
   outputs = inputs@{ self, nixpkgs, flake-parts, ... }:
@@ -15,10 +20,11 @@
       # systems = [ "x86_64-linux" ];
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [
+         inputs.pre-commit.flakeModule
         inputs.haskell-flake.flakeModule
         inputs.flake-root.flakeModule
         inputs.treefmt-nix.flakeModule
-        inputs.mission-control.flakeModule
+        # inputs.mission-control.flakeModule
       ];
       perSystem = { self', lib, config, pkgs, ... }: {
         haskellProjects.main = {
@@ -51,32 +57,41 @@
             options = [ "--ghc-opt" "-XImportQualifiedPost" ];
           };
         };
-        mission-control.scripts = {
-          docs = {
-            description = "Start Hoogle server for project dependencies";
-            exec = ''
-              echo http://127.0.0.1:8888
-              hoogle serve -p 8888 --local
-            '';
-            category = "Dev Tools";
-          };
-          repl = {
-            description = "Start the cabal repl";
-            exec = ''
-              cabal repl "$@"
-            '';
-            category = "Dev Tools";
-          };
-          fmt = {
-            description = "Format the source tree";
-            exec = config.treefmt.build.wrapper;
-            category = "Dev Tools";
-          };
-        };
+        # mission-control.scripts = {
+        #   docs = {
+        #     description = "Start Hoogle server for project dependencies";
+        #     exec = ''
+        #       echo http://127.0.0.1:8888
+        #       hoogle serve -p 8888 --local
+        #     '';
+        #     category = "Dev Tools";
+        #   };
+        #   repl = {
+        #     description = "Start the cabal repl";
+        #     exec = ''
+        #       cabal repl "$@"
+        #     '';
+        #     category = "Dev Tools";
+        #   };
+        #   fmt = {
+        #     description = "Format the source tree";
+        #     exec = config.treefmt.build.wrapper;
+        #     category = "Dev Tools";
+        #   };
+        # };
         devShells.default = pkgs.mkShell {
-          inputsFrom = [ config.mission-control.devShell self'.devShells.main ];
+           inputsFrom = [
+            config.pre-commit.devShell
+            config.treefmt.build.devShell
+            config.haskellProjects.default.outputs.devShell
+          ];
+          buildInputs = [
+            pkgs.rust-bin.beta.latest.default
+          ];
+          # inputsFrom = [ config.mission-control.devShell self'.devShells.main ];
         };
-        packages.default = self'.packages.main-try-effectful;
+        packages.default = self'.packages.try-effectful;
+
       };
     };
 }
