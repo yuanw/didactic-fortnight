@@ -10,11 +10,13 @@
       ((atom? (car l)) (lat? (cdr l)))
       (else #f))))
 
-(define (remember? a lat)
+(define (member? a lat)
   (cond
      ((null? lat) #f)
      ((eq? a (car lat)) #t)
-     (else (remember? a (cdr lat)))))
+     (else (member? a (cdr lat)))))
 
-(remember? 'poached '(fried eggs and scrambled eggs))
-(remember? 'poached '(fried eggs and scrambled eggs and poached))
+(display "member? 'poached '(fried eggs and scrambled eggs))")
+(display (member? 'poached '(fried eggs and scrambled eggs)))
+(display "member? 'poached '(fried eggs and scrambled eggs poached))")
+(member? 'poached '(fried eggs and scrambled eggs and poached))
