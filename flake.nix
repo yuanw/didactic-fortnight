@@ -8,6 +8,7 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
     treefmt-nix.url = "github:numtide/treefmt-nix";
     treefmt-nix.inputs.nixpkgs.follows = "nixpkgs";
+      zig.url = "github:mitchellh/zig-overlay";
     pre-commit = {
       url = "github:cachix/pre-commit-hooks.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -26,6 +27,7 @@
       perSystem = { self', lib, system, config, pkgs, ... }: {
         _module.args.pkgs = import inputs.nixpkgs {
           inherit system;
+          zigpkgs = inputs.zig.packages.${system};
           overlays = [
             inputs.rust-overlay.overlays.default
           ];
@@ -65,6 +67,7 @@
             config.haskellProjects.main.outputs.devShell
           ];
           buildInputs = [
+            pkgs.zigpkgs.master
             pkgs.rust-bin.beta.latest.default
           ];
         };
