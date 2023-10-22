@@ -1,4 +1,4 @@
--- |https://en.wikibooks.org/wiki/Haskell/Zippers#Theseus_and_the_Zipper
+-- | https://en.wikibooks.org/wiki/Haskell/Zippers#Theseus_and_the_Zipper
 module Labyrinth where
 
 data Node a
