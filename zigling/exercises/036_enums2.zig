@@ -31,7 +31,7 @@ const std = @import("std");
 const Color = enum(u32) {
     red = 0xff0000,
     green = 0x00ff00,
-    blue =  0x0000ff,
+    blue = 0x0000ff,
 };
 
 pub fn main() void {

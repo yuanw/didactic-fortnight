@@ -37,7 +37,7 @@ pub fn main() void {
             },
             else => {
                 unreachable;
-            }
+            },
         }
 
         std.debug.print("{} ", .{current_value});
