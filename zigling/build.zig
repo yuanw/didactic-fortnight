@@ -15,7 +15,7 @@ const print = std.debug.print;
 //     1) Getting Started
 //     2) Version Changes
 comptime {
-    const required_zig = "0.11.0-dev.4246";
+    const required_zig = "0.12.0-dev.1243";
     const current_zig = builtin.zig_version;
     const min_zig = std.SemanticVersion.parse(required_zig) catch unreachable;
     if (current_zig.order(min_zig) == .lt) {
@@ -281,14 +281,14 @@ const ZiglingStep = struct {
 
     fn run(self: *ZiglingStep, exe_path: []const u8, _: *std.Progress.Node) !void {
         resetLine();
-        print("Checking {s}...\n", .{self.exercise.main_file});
+        print("Checking: {s}\n", .{self.exercise.main_file});
 
         const b = self.step.owner;
 
         // Allow up to 1 MB of stdout capture.
         const max_output_bytes = 1 * 1024 * 1024;
 
-        var result = Child.exec(.{
+        var result = Child.run(.{
             .allocator = b.allocator,
             .argv = &.{exe_path},
             .cwd = b.build_root.path.?,
@@ -306,7 +306,7 @@ const ZiglingStep = struct {
         }
     }
 
-    fn check_output(self: *ZiglingStep, result: Child.ExecResult) !void {
+    fn check_output(self: *ZiglingStep, result: Child.RunResult) !void {
         const b = self.step.owner;
 
         // Make sure it exited cleanly.
@@ -355,7 +355,7 @@ const ZiglingStep = struct {
         print("{s}PASSED:\n{s}{s}\n\n", .{ green_text, output, reset_text });
     }
 
-    fn check_test(self: *ZiglingStep, result: Child.ExecResult) !void {
+    fn check_test(self: *ZiglingStep, result: Child.RunResult) !void {
         switch (result.term) {
             .Exited => |code| {
                 if (code != 0) {
@@ -376,7 +376,7 @@ const ZiglingStep = struct {
     }
 
     fn compile(self: *ZiglingStep, prog_node: *std.Progress.Node) !?[]const u8 {
-        print("Compiling {s}...\n", .{self.exercise.main_file});
+        print("Compiling: {s}\n", .{self.exercise.main_file});
 
         const b = self.step.owner;
         const exercise_path = self.exercise.main_file;
@@ -839,7 +839,7 @@ const exercises = [_]Exercise{
     },
     .{
         .main_file = "060_floats.zig",
-        .output = "Shuttle liftoff weight: 1995796kg",
+        .output = "Shuttle liftoff weight: 2032092kg",
     },
     .{
         .main_file = "061_coercions.zig",
