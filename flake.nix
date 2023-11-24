@@ -84,8 +84,6 @@
             pkgs.rust-bin.beta.latest.default
           ];
         };
-       # packages.default = self'.packages.try-effectful;
-
       };
     };
 }
