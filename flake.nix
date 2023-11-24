@@ -46,6 +46,7 @@
               } // config.treefmt.build.programs;
             hlsCheck.enable = true;
           };
+           autoWire = [ "packages" "apps" "checks" ];
         };
         treefmt.config = {
           inherit (config.flake-root) projectRootFile;
@@ -73,7 +74,7 @@
             pkgs.rust-bin.beta.latest.default
           ];
         };
-        packages.default = self'.packages.try-effectful;
+       packages.default = self'.packages.try-effectful;
 
       };
     };
