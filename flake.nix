@@ -15,7 +15,7 @@
     };
   };
 
- nixConfig = {
+  nixConfig = {
     extra-substituters = [
       "https://cache.iog.io"
     ];
@@ -56,7 +56,7 @@
               } // config.treefmt.build.programs;
             hlsCheck.enable = true;
           };
-           autoWire = [ "packages" "apps" "checks" ];
+          autoWire = [ "packages" "apps" "checks" ];
         };
         treefmt.config = {
           inherit (config.flake-root) projectRootFile;
