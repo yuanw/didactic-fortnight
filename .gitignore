@@ -7,7 +7,7 @@ cabal.project.local~
 # nix
 result
 result-*
-
+*.agdai
 # direnv
 .direnv
 .pre-commit-config.yaml
