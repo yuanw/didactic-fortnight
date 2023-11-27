@@ -1,3 +1,4 @@
+{-# OPTIONS --exact-split #-}
 module Naturals where
 -- https://github.com/plfa/plfa.github.io/blob/dev/src/plfa/part1/Naturals.lagda.md
 data ℕ : Set where
@@ -109,3 +110,52 @@ _ =
   ≡⟨⟩    -- simplify
     81
   ∎
+
+_∸_ : ℕ → ℕ → ℕ
+m     ∸ zero   =  m
+zero  ∸ suc n  =  zero
+suc m ∸ suc n  =  m ∸ n
+
+
+data Bin : Set where
+  ⟨⟩ : Bin
+  _O : Bin → Bin
+  _I : Bin → Bin
+
+elve : Bin
+elve = ⟨⟩ I O I I
+
+inc : Bin → Bin
+inc ⟨⟩ =  ⟨⟩ I
+inc (x O) =  x I
+inc (x I) = (inc x) O
+
+
+_ : inc (⟨⟩ I O I I) ≡ ⟨⟩ I I O O
+-- _ =
+--   begin
+--    inc (⟨⟩ I O I I)
+
+--   ≡ ⟨⟩
+--     inc (⟨⟩ I O I) I
+
+--   ≡ ⟨⟩
+--     (inc ⟨⟩ I O I) O
+
+--   ≡ ⟨⟩
+--     I I O O
+--   ∎
+_ = refl
+
+to   : ℕ → Bin
+to zero = ⟨⟩
+to (suc m) = inc (to m)
+
+from : Bin → ℕ
+from ⟨⟩ =  zero
+from (x I) =  (from (x) * 2) + 1
+from (x O) = (from x) * 2
+
+
+_ : from (⟨⟩ I O I I) ≡ 11
+_ = refl
