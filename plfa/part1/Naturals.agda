@@ -1,5 +1,5 @@
 {-# OPTIONS --exact-split #-}
-module Naturals where
+module plfa.part1.Naturals where
 -- https://github.com/plfa/plfa.github.io/blob/dev/src/plfa/part1/Naturals.lagda.md
 data ℕ : Set where
   zero : ℕ
