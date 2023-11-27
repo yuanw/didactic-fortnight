@@ -156,6 +156,9 @@ from ⟨⟩ =  zero
 from (x I) =  (from (x) * 2) + 1
 from (x O) = (from x) * 2
 
+_ : to 11 ≡ ⟨⟩ I O I I
+_ = refl
+
 
 _ : from (⟨⟩ I O I I) ≡ 11
 _ = refl
