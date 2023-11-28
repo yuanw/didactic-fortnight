@@ -35,12 +35,13 @@ pub fn main() void {
     // at compile time.
     //
     // Please fix this to loop once per "instruction":
-    ??? (i < instructions.len) : (???) {
+    inline while (i < instructions.len) : (i += 3) {
 
         // This gets the digit from the "instruction". Can you
         // figure out why we subtract '0' from it?
         const digit = instructions[i + 1] - '0';
 
+        // @compileLog("Count at compile time: ", i instructions[i+1],  instructions[i+1] - '0');
         // This 'switch' statement contains the actual work done
         // at runtime. At first, this doesn't seem exciting...
         switch (instructions[i]) {
