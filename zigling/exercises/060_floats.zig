@@ -38,7 +38,7 @@
 const print = @import("std").debug.print;
 
 pub fn main() void {
-   // The approximate weight of the Space Shuttle upon liftoff
+    // The approximate weight of the Space Shuttle upon liftoff
     // (including boosters and fuel tank) was 4,480,000 lb.
     //
     // We'll convert this weight from pound to kilograms at a

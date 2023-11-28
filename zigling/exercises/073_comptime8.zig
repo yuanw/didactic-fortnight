@@ -57,7 +57,7 @@ fn getLlama(comptime i: usize) u32 {
 
 // Fun fact: this assert() function is identical to
 // std.debug.assert() from the Zig Standard Library.
-fn assert( ok: bool) void {
+fn assert(ok: bool) void {
     if (!ok) unreachable;
 }
 //
